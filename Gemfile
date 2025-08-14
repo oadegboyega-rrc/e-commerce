@@ -61,3 +61,41 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+#Authentication
+gem 'devise'
+
+#Admin interface
+gem 'activeadmin'
+
+#Bootstrap for styling
+gem 'bootstrap', '~> 5.3.1'
+gem 'jquery-rails'
+
+#Image_processing
+gem 'image_processing', '~> 1.2'
+
+#Pagination
+gem 'kaminari'
+
+#SASS
+gem 'sassc-rails'
+
+#Search functionality
+gem 'ransack'
+
+group :development, :test do
+  #code quality
+  gem 'rubocop', require: false
+  gem 'rubocop-rails', require: false
+
+
+  #Testing (for later)
+  gem 'rspec-rails', '~> 5.0'
+  gem 'factory_bot_rails'
+end
+group :development do
+  #Better error pages
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
