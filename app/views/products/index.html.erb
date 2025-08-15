@@ -1,0 +1,56 @@
+<div class="d-flex justify-content -between align-items-center mb-4">
+    <h1>
+        <% if @current_category.present? %>
+            <%= @current_category %> Products
+        <% elsif @search_keyboard.present? %>
+            Search Results
+            <%= if @search_category.present? %>
+                in <%= @search_category %>
+            <% end %>
+        <% else %>
+            Our Products
+        <% end %>
+    </h1>
+
+    <div class="d-flex gap-2">
+        <% link_to "All", products_path(category: @current_category),
+            class: "btn #{ 'btn-primary' if params[:filter].blank?} #{ 'btn-outline-primary' unless params[:filter].blank?}" %>
+        <% link_to "On Sale", products_path(filter: 'on_sale', category: @current_category),
+            class: "btn #{ 'btn-primary' if params[:filter] == 'on_sale'} #{ 'btn-outline-primary' unless params[:filter] == 'on_sale'}" %>
+        <% link_to "New Arrivals", products_path(filter: 'new', category: @current_category),
+            class: "btn #{ 'btn-primary' if params[:filter] == 'new'} #{ 'btn-outline-primary' unless params[:filter] == 'new'}" %>
+        <%= link_to "Recently Updated", products_path(filter: 'recent', category: @current_category),
+            class: "btn #{'btn-primary' if params[:filter] == 'recent'} #{'btn-outline-primary' unless params[:filter] == 'recent'}" %>
+    </div>
+</div>
+
+<% if @search_keyword.present? %>
+    <div class="alert alert-info">
+        <strong><%= @products.total_count %></strong> results found for
+        "<strong><%= @search_keyword %></strong>"
+        <% if @search_category.present? %>
+            in <strong><%= @search_category %></strong>
+        <% end %>
+    </div>
+<% end %>
+<% if @products.any? %>
+    <div class="row">
+        <% @products.each do |product| %>
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <%= render 'product_card', product: product %>
+            </div>
+        <% end %>
+    </div>
+
+    <-- Pagination Controls -->
+    <div class="d-flex justify-content-center mt-4">
+        <%= paginate @products, theme: 'twitter-bootstrap-4' %>
+    </div>
+<% else %>
+    <div class="text-center py-5">
+        <h3>No products found</h3>
+        <p class="text-muted">Try adjusting your search or filter criteria.</p>
+        <%= link_to "View All Products", root_path, class: "btn btn-primary" %>
+    </div>
+<% end %>
+        

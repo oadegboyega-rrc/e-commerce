@@ -1,0 +1,52 @@
+<nav clas="navbar navbar-expand-lg store-headert">
+  <div class="container">
+    <%= link_to "My Ecommerce Store", root_path, class: "navbar-brand" %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="/products">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Categories
+        </a>
+        <ul class="dropdown-menu">
+          <% ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'].each do |category| %>
+            <li>
+                <%= link_to category, products_path(category: category), class: "dropdown-item" %>
+            </li>
+            <% end %>
+        </ul>
+        </li>
+        <li class="nav-item">
+            <%= link_to "About", about_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+            <%= link_to "Contact", contact_path, class: "nav-link" %>
+        </li>
+        </ul>
+
+        <div class= "d-flex align-items-center">
+        <%# <-!- Search Form> %>
+        <%= render 'shared/search_form' %>
+
+        <%# <-!-Shopping Cart %>
+        <%= link_to cart_path, class: "btn btn-outline-light ms-3 cart-icon" do %>
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cart-count">
+              <%= session[:cart]&.values&.sum || 0 %>
+            </span>
+            
+        <% end %>
+    </div>
+    </div>
+  </div>
+</nav>

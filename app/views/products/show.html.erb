@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-md-6">
+        <% if @product.images.attached? %>
+            <div class="mb-3">
+                <%= image_tag @product.images.first, class: "img-fluid rounded",
+                    id: "main-product-image" %>
+            </div>
+
+            <% if @product.images.count > 1 %>
+                <div class="d-flex gap-2 flex-wrap">
+                    <% @product.images.each_with_index fo |image, index| %>
+                        <%= image_tag image, class: "img-thumbnail thumbnail-image",
+                            style: "width: 80px; height: 80px; object-fit: cover; cursor: pointer;",
+                            onclick: "chnageMainImage('#{url_for(image)}')" %>
+                    <% end %>
+                </div>
+            <% end %>
+        <% else %>
+            <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                    style="height: 400px;">
+                <span class="text-muted fs-1">No Image Available</span>
+            </div>
+        <% end %>
+    </div>
+
+    <div class="col-md-6">
+        <div class="mb-2">
+            <% if @product.on_sale %>
+                <span class="badge on-sale me-1">On Sale</span>
+            <% end %>
+            <% if @product.new_arrival %>
+                <span class="badge new-arrival">New Arrival</span>
+            <% end %>
+        </div>
+
+        <h1 class="mb-3"><%= @product.name %></h1>
+
+        <p class="text-muted mb-3">Category: <%= @product.category %></p>
+
+        <h2 class="price mb-4"><%= number_to_currency(@product.price) %></h2>
+
+        <div class="mb-4">
+            <h5>Description</h5>
+            <p><%= simple_format(@product,description) %></p>
+        </div>
+
+        <%# <- Add to cart form -> %>
+        <%= form_with url: add_item_cart_path, method: :post,
+            local: true, class: "mb-3" do |f| %>
+            <%= f.hidden_field :product_id, value: @product.id %>
+
+            <div class="row align-items-end">
+                <div class="col-auto">
+                    <%= f.label :quantity, class: "form-label" %>
+                    <%= f.number_field :quantity, value: 1, min: 1, max: 10,
+                        class: "form-control", style: "width: 80px;" %>
+                </div>
+                <div class="col-auto">
+                    <%= f.submit "Add to Cart", class: "btn btn-primary btn-lg" %>
+                </div>
+            </div>
+        <% end %>
+
+        <div clas="d-flex gap-2 mb-3">
+            <%= link_to "⬅️ Back to Products", :back, class: "btn btn-outline-secondary" %>
+            <%= link_to "View Category: #{@product.category}",
+                products_path(category: @product.category), class: "btn btn-outline-primary" %>
+        </div>
+    </div>
+</div>
+
+<%# <- Related Products Section -> %>
+<hr class="my-5">
+<h3>More from <%= @product.category %></h3>
+<div class="row">
+    <% Product.where(category: @product.category).where.not(id: @product.id).limit(4).each do |product| %>
+        <div class="col-lg-3 col-md-6 mb-3">
+            <%= render 'product_card', product: product %>
+        </div>
+    <% end %>
+</div>
+
+<script>
+function chnageMainImage(imageUrl) {
+    document.getElementById('main-product-image').src = imageUrl;
+}
+</script>

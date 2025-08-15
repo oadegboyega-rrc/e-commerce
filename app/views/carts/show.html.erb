@@ -1,0 +1,105 @@
+<h1>Shopping Cart</h1>
+
+<% if @cart_items.any? %>
+    <div class="row">
+        <div class="col-lg-8">
+            <% @cart_items.each do |item| %>
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <% if item[:product].images.attached? %>
+                                <%= image_tag item[:product].images.first,
+                                    class: "img-fluid rounded-start h-100",
+                                    style: "object-fit: cover;" %>
+                            <% else %>
+                                <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                                    <span class="text-muted">No Image</span>
+                                </div>
+                            <% end %>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="card-title">
+                                            <%= link_to item[:product].name, product_path(item[:product]),
+                                                class: "text-decoration-none" %>
+                                        </h5>
+                                        <p class="card-text text-muted"><%= item[:product].category %></p>
+                                        <p class="card-text">
+                                            <strong><%= number_to_currency(item[:product].price) %></strong> each
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                    <% form_with url: update_item_cart_path, method: :patch,
+                                        local: true, class: "md-2" do |f| %>
+                                        <%= f.hidden_field :product_id, value: item[:product].id %>
+                                        <div class="input-group" style="max-width: 150px;">
+                                            <%= f.number_field :quantity, value: item[:quantity],
+                                                min: 1, max: 10, class: "form-control" %>
+                                            <button class="btn btn-outline-primary" type="submit">Update</button>
+                                        </div>
+                                    <% end %>
+
+                                    <%# <- Remove item Button -> %>
+                                    <% link_to remove_item_cart_path(product_id: item[:product].id),
+                                        method: :delete, 
+                                        confirm: "Are you sure you want to remove this item?",
+                                        class: "btn btn-outline-danger btn-sm" do %>
+                                        <i class="fas fa-trash"></i> Remove
+                                    <% end %>
+
+                                    <div class="mt-2">
+                                        <strong>Subtotal: <%= number_to_currency(item[:total]) %></strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+
+        <%# <- Cart Summary %>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5> order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Item (<%= @cart_items.sum { |item| item[:quantity] } %>)</span>
+                        <span><%= number_to_currency(@total) %></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span>FREE</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total</strong>
+                        <strong><%= number_to_currency(@total) %></strong>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg" disabled>
+                            Proceed to Checkout
+                            <small class="d-block"> (Coming Soon)</small>
+                        </button>
+                        <%= link_to "Continue Shopping", root_path, class: "btn btn-outline-primary" %>
+                        <%= link_to "Clear Cart", cart_path, method: :delete,
+                            confirm: "Are you sure you want to clear your cart>",
+                            class: "btn btn-outline-danger" %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<% else %>
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+        <h3>Your cart is empty</h3>
+        <p class="text-muted">Add some products to get started!</p>
+        <%= link_to "Start Shopping", root_path, class: "btn btn-primary" %>
+    </div>
+<% end %>

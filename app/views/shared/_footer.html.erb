@@ -1,0 +1,51 @@
+<footer class="bg-dark text-light mt-5 py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>My E-Commerce Store
+                <p>Your one-stop shop for everything you need.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><%= link_to "Home", root_path, class: "text-light text-decoration-none" %></li>
+                    <li><%= link_to "About", about_path, class: "text-light text-decoration-none" %></li>
+                    <li><%= link_to "Contact", contact_path, class: "text-light text-decoration-none" %></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Categories</h5>
+                <ul class="list-unstyled">
+                    <% ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'].each do |category| %>
+                        <li>
+                            <%= link_to category, products_path(category: category), class: "text-light text-decoration-none" %>
+                        </li>
+                    <% end %>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <p>&copy; 2025 My E-Commerce Store. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+        <p>&copy; <%= Time.current.year %> My Ecommerce Store. All rights reserved.</p>
+        <p>
+        <%= link_to "Privacy Policy", privacy_policy_path, class: "text-light" %> |
+        <%= link_to "Terms of Service", terms_of_service_path, class: "text-light" %>
+        </p>
+        <p>Follow us on:
+        <%= link_to "Facebook", "https://facebook.com", target: "_blank", class: "text-light" %>,
+        <%= link_to "Twitter", "https://twitter.com", target: "_blank", class: "text-light" %>,
+        <%= link_to "Instagram", "https://instagram.com", target: "_blank", class: "text-light" %>
+        </p>
+    </div>

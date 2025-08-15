@@ -1,0 +1,20 @@
+<%= form_with url: search_products_path, method: :get, local: true, class: "d-flex" do |f| %>
+    <%= f.select :category,
+        options_for_select([['All Categories', '']] +
+        ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'].map { |c| [c, c]}),
+        { selected: params[:category]},
+        { class: "form-select me-2", style: "width: auto;"} %>
+
+    <%= f.text_field :keyboard,
+        placeholder: "Search products...",
+        class: "form-control me-2",
+        value: params[:keyboard] %>
+
+    <%= f.submit "Search", class: "btn btn-light" %>
+<% end %>
+        
+
+
+
+
+    
