@@ -1,0 +1,137 @@
+<!-- app/views/profiles/show.html.erb -->
+
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>My Profile</h1>
+      <%= link_to "Edit Profile", edit_profile_path, class: "btn btn-primary" %>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-4">
+    <!-- Profile Information Card -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Personal Information</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <strong>Name:</strong><br>
+          <%= @user.full_name.present? ? @user.full_name : "Not provided" %>
+        </div>
+        
+        <div class="mb-3">
+          <strong>Email:</strong><br>
+          <%= @user.email %>
+        </div>
+        
+        <div class="mb-3">
+          <strong>Phone:</strong><br>
+          <%= @user.phone.present? ? @user.phone : "Not provided" %>
+        </div>
+        
+        <div class="mb-3">
+          <strong>Member since:</strong><br>
+          <%= @user.created_at.strftime("%B %Y") %>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Address Information Card -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Shipping Address</h5>
+      </div>
+      <div class="card-body">
+        <% if @user.address_complete? %>
+          <%= simple_format(@user.full_address) %>
+        <% else %>
+          <p class="text-muted">No address provided</p>
+          <p class="small">Complete your address to speed up checkout.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-8">
+    <!-- Recent Orders -->
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Recent Orders</h5>
+        <%= link_to "View All Orders", orders_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <div class="card-body">
+        <% if @recent_orders.any? %>
+          <% @recent_orders.each do |order| %>
+            <div class="border-bottom pb-3 mb-3">
+              <div class="row">
+                <div class="col-md-3">
+                  <strong>Order <%= order.order_number %></strong>
+                  <div class="small text-muted">
+                    <%= order.order_date.strftime("%b %d, %Y") %>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <span class="badge bg-<%= case order.status
+                                          when 'pending' then 'warning'
+                                          when 'paid' then 'info'  
+                                          when 'shipped' then 'primary'
+                                          when 'delivered' then 'success'
+                                          when 'cancelled' then 'danger'
+                                          else 'secondary'
+                                          end %>">
+                    <%= order.status.humanize %>
+                  </span>
+                </div>
+                <div class="col-md-3">
+                  <strong><%= number_to_currency(order.total) %></strong>
+                </div>
+                <div class="col-md-3 text-end">
+                  <%= link_to "View Details", order_path(order), 
+                      class: "btn btn-sm btn-outline-primary" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="text-center py-4">
+            <i class="fas fa-shopping-bag fa-2x text-muted mb-2"></i>
+            <p class="text-muted">No orders yet</p>
+            <%= link_to "Start Shopping", root_path, class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Account Actions -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Account Actions</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <%= link_to orders_path, class: "btn btn-outline-primary w-100" do %>
+              <i class="fas fa-shopping-bag d-block mb-2"></i>
+              View All Orders
+            <% end %>
+          </div>
+          <div class="col-md-4 mb-3">
+            <%= link_to edit_profile_path, class: "btn btn-outline-primary w-100" do %>
+              <i class="fas fa-user-edit d-block mb-2"></i>
+              Edit Profile
+            <% end %>
+          </div>
+          <div class="col-md-4 mb-3">
+            <%= link_to edit_user_registration_path, class: "btn btn-outline-primary w-100" do %>
+              <i class="fas fa-key d-block mb-2"></i>
+              Change Password
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

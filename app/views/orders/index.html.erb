@@ -1,0 +1,89 @@
+<!-- app/views/orders/index.html.erb -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>My Orders</h1>
+  <%= link_to "Continue Shopping", root_path, class: "btn btn-primary" %>
+</div>
+
+<% if @orders.any? %>
+  <% @orders.each do |order| %>
+    <div class="card mb-3">
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <strong>Order <%= order.order_number %></strong>
+          </div>
+          <div class="col-md-3">
+            <small class="text-muted">
+              Placed on <%= order.order_date.strftime("%B %d, %Y") %>
+            </small>
+          </div>
+          <div class="col-md-3">
+            <span class="badge bg-<%= case order.status
+                                    when 'pending' then 'warning'
+                                    when 'paid' then 'info'  
+                                    when 'shipped' then 'primary'
+                                    when 'delivered' then 'success'
+                                    when 'cancelled' then 'danger'
+                                    else 'secondary'
+                                    end %>">
+              <%= order.status.humanize %>
+            </span>
+          </div>
+          <div class="col-md-3 text-end">
+            <strong><%= number_to_currency(order.total) %></strong>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8">
+            <h6>Items (<%= order.total_items %>)</h6>
+            <div class="d-flex gap-2 mb-2">
+              <% order.order_items.limit(3).each do |item| %>
+                <div class="d-flex align-items-center me-3">
+                  <% if item.product.images.attached? %>
+                    <%= image_tag item.product.images.first, 
+                        style: "width: 40px; height: 40px; object-fit: cover;", 
+                        class: "rounded me-2" %>
+                  <% else %>
+                    <div class="bg-light rounded me-2" style="width: 40px; height: 40px;"></div>
+                  <% end %>
+                  <small>
+                    <%= truncate(item.product.name, length: 20) %>
+                    <span class="text-muted">(×<%= item.quantity %>)</span>
+                  </small>
+                </div>
+              <% end %>
+              <% if order.order_items.count > 3 %>
+                <small class="text-muted align-self-center">
+                  and <%= order.order_items.count - 3 %> more items
+                </small>
+              <% end %>
+            </div>
+          </div>
+          <div class="col-md-4 text-end">
+            <%= link_to "View Details", order_path(order), class: "btn btn-outline-primary" %>
+            <% if order.can_be_cancelled? %>
+              <%= link_to "Cancel", order_path(order), method: :delete, 
+                  confirm: "Are you sure you want to cancel this order?",
+                  class: "btn btn-outline-danger btn-sm ms-2" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <!-- Pagination -->
+  <div class="d-flex justify-content-center">
+    <%= paginate @orders, theme: 'twitter-bootstrap-4' %>
+  </div>
+<% else %>
+  <div class="text-center py-5">
+    <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+    <h3>No orders yet</h3>
+    <p class="text-muted">When you place orders, they'll appear here.</p>
+    <%= link_to "Start Shopping", root_path, class: "btn btn-primary" %>
+  </div>
+<% end %>

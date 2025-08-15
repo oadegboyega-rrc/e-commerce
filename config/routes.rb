@@ -1,5 +1,15 @@
 ## removed duplicate routes block
 Rails.application.routes.draw do
+  get "profiles/show"
+  get "profiles/edit"
+  get "profiles/update"
+  get "orders/index"
+  get "orders/show"
+  get "checkout/show"
+  get "checkout/address"
+  get "checkout/review"
+  get "checkout/complete"
+  devise_for :users
   get "privacy", to: "pages#privacy", as: :privacy_policy
   get "terms", to: "pages#terms", as: :terms_of_service
   get "pages/about"
@@ -37,6 +47,25 @@ Rails.application.routes.draw do
       post :remove_item
     end
   end
+
+  # Checkout routes (Feature 3.1.3 ✯)
+  resources :checkout, only: [:show, :create] do
+    collection do
+      get :address
+      post :process_address
+      get :review
+      post :complete
+    end
+  end
+  
+  # User profile and orders (Feature 3.2.1)
+  resources :orders, only: [:index, :show]
+  resource :profile, only: [:show, :edit, :update]
+  
+  # Static pages
+  get 'about', to: 'pages#about'
+  get 'contact', to: 'pages#contact'
+
 
   # Static pages
   get "about", to: "pages#about"

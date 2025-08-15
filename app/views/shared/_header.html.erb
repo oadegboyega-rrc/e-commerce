@@ -1,52 +1,106 @@
-<nav clas="navbar navbar-expand-lg store-headert">
-  <div class="container">
-    <%= link_to "My Ecommerce Store", root_path, class: "navbar-brand" %>
+<!-- app/views/shared/_header.html.erb -->
 
+<nav class="navbar navbar-expand-lg store-header">
+  <div class="container">
+    <%= link_to "My E-Commerce Store", root_path, class: "navbar-brand" %>
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+    
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <%= link_to "Home", root_path, class: "nav-link" %>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link" href="/products">Products</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             Categories
-        </a>
-        <ul class="dropdown-menu">
-          <% ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'].each do |category| %>
-            <li>
+          </a>
+          <ul class="dropdown-menu">
+            <% ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'].each do |category| %>
+              <li>
                 <%= link_to category, products_path(category: category), class: "dropdown-item" %>
-            </li>
+              </li>
             <% end %>
-        </ul>
+          </ul>
         </li>
         <li class="nav-item">
-            <%= link_to "About", about_path, class: "nav-link" %>
+          <%= link_to "About", about_path, class: "nav-link" %>
         </li>
         <li class="nav-item">
-            <%= link_to "Contact", contact_path, class: "nav-link" %>
+          <%= link_to "Contact", contact_path, class: "nav-link" %>
         </li>
-        </ul>
-
-        <div class= "d-flex align-items-center">
-        <%# <-!- Search Form> %>
+      </ul>
+      
+      <div class="d-flex align-items-center">
+        <!-- Search Form (Feature 2.6 ✯) -->
         <%= render 'shared/search_form' %>
-
-        <%# <-!-Shopping Cart %>
-        <%= link_to cart_path, class: "btn btn-outline-light ms-3 cart-icon" do %>
-            <i class="fas fa-shopping-cart"></i>
-            <span class="cart-count" id="cart-count">
-              <%= session[:cart]&.values&.sum || 0 %>
-            </span>
-            
+        
+        <!-- User Authentication Links -->
+        <% if user_signed_in? %>
+          <div class="dropdown ms-3">
+            <a class="btn btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="fas fa-user"></i> <%= current_user.first_name || "Account" %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <%= link_to profile_path, class: "dropdown-item" do %>
+                  <i class="fas fa-user-cog me-2"></i>My Profile
+                <% end %>
+              </li>
+              <li>
+                <%= link_to orders_path, class: "dropdown-item" do %>
+                  <i class="fas fa-shopping-bag me-2"></i>My Orders
+                <% end %>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <%= link_to destroy_user_session_path, method: :delete, class: "dropdown-item" do %>
+                  <i class="fas fa-sign-out-alt me-2"></i>Sign Out
+                <% end %>
+              </li>
+            </ul>
+          </div>
+        <% else %>
+          <div class="ms-3">
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-outline-light me-2" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-light" %>
+          </div>
         <% end %>
+        
+        <!-- Shopping Cart -->
+        <%= link_to cart_path, class: "btn btn-outline-light ms-3 cart-icon" do %>
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">
+            <%= session[:cart]&.values&.sum || 0 %>
+          </span>
+        <% end %>
+      </div>
     </div>
+  </div>
+</nav></ul>
+        </li>
+        <li class="nav-item">
+          <%= link_to "About", about_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "Contact", contact_path, class: "nav-link" %>
+        </li>
+      </ul>
+      
+      <div class="d-flex align-items-center">
+        <!-- Search Form (Feature 2.6 ✯) -->
+        <%= render 'shared/search_form' %>
+        
+        <!-- Shopping Cart -->
+        <%= link_to cart_path, class: "btn btn-outline-light ms-3 cart-icon" do %>
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cart-count">
+            <%= session[:cart]&.values&.sum || 0 %>
+          </span>
+        <% end %>
+      </div>
     </div>
   </div>
 </nav>

@@ -1,0 +1,135 @@
+<!-- app/views/checkout/review.html.erb -->
+
+<div class="row">
+  <div class="col-12">
+    <h1>Checkout</h1>
+    
+    <!-- Checkout Steps Progress Bar -->
+    <div class="progress mb-4" style="height: 30px;">
+      <div class="progress-bar bg-primary" role="progressbar" style="width: 100%">
+        Step 3: Review & Place Order
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <!-- Shipping Address -->
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Shipping Address</h5>
+        <%= link_to "Change", address_checkout_index_path, class: "btn btn-sm btn-outline-primary" %>
+      </div>
+      <div class="card-body">
+        <strong><%= current_user.full_name %></strong><br>
+        <%= simple_format(current_user.full_address) %>
+        <p class="mb-0">
+          <strong>Phone:</strong> <%= current_user.phone %>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Order Items -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Order Items</h5>
+      </div>
+      <div class="card-body">
+        <% @cart_items.each_with_index do |item, index| %>
+          <div class="<%= 'border-bottom pb-3 mb-3' unless index == @cart_items.length - 1 %>">
+            <div class="row">
+              <div class="col-md-2">
+                <% if item[:product].images.attached? %>
+                  <%= image_tag item[:product].images.first, 
+                      class: "img-fluid rounded", 
+                      style: "max-height: 80px; object-fit: cover;" %>
+                <% else %>
+                  <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                       style="height: 80px;">
+                    <small class="text-muted">No Image</small>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-6">
+                <h6><%= item[:product].name %></h6>
+                <p class="text-muted mb-1"><%= item[:product].category %></p>
+                <small class="text-muted">
+                  <%= truncate(item[:product].description, length: 100) %>
+                </small>
+              </div>
+              <div class="col-md-2 text-center">
+                <strong>Qty: <%= item[:quantity] %></strong>
+              </div>
+              <div class="col-md-2 text-end">
+                <div>
+                  <%= number_to_currency(item[:product].price) %> each
+                </div>
+                <strong><%= number_to_currency(item[:total]) %></strong>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h5>Order Summary</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+          <span>Items (<%= @cart_items.sum { |item| item[:quantity] } %>):</span>
+          <span><%= number_to_currency(@subtotal) %></span>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-2">
+          <span>Shipping:</span>
+          <span>FREE</span>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-2">
+          <span>Tax:</span>
+          <div class="text-end">
+            <div><%= number_to_currency(@tax_amount) %></div>
+            <% @tax_breakdown.each do |tax_type, amount| %>
+              <small class="text-muted d-block">
+                <%= tax_type.upcase %>: <%= number_to_currency(amount) %>
+              </small>
+            <% end %>
+          </div>
+        </div>
+        
+        <hr>
+        
+        <div class="d-flex justify-content-between mb-4">
+          <strong>Total:</strong>
+          <strong class="fs-5 text-primary"><%= number_to_currency(@total) %></strong>
+        </div>
+        
+        <!-- Place Order Form -->
+        <%= form_with url: complete_checkout_index_path, method: :post, local: true do |f| %>
+          <div class="d-grid gap-2">
+            <%= f.submit "Place Order", class: "btn btn-primary btn-lg", 
+                confirm: "Are you sure you want to place this order for #{number_to_currency(@total)}?" %>
+          </div>
+        <% end %>
+        
+        <div class="mt-3 text-center">
+          <%= link_to "← Back to Address", address_checkout_index_path, 
+              class: "btn btn-outline-secondary" %>
+        </div>
+        
+        <div class="mt-3 p-3 bg-light rounded">
+          <small class="text-muted">
+            <i class="fas fa-lock me-1"></i>
+            <strong>Secure Checkout:</strong> Your payment information is encrypted and secure.
+            By placing your order, you agree to our terms and conditions.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

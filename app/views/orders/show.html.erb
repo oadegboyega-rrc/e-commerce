@@ -1,0 +1,185 @@
+<!-- app/views/orders/show.html.erb -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>Order <%= @order.order_number %></h1>
+    <p class="text-muted">
+      Placed on <%= @order.order_date.strftime("%B %d, %Y at %l:%M %p") %>
+    </p>
+  </div>
+  <div>
+    <span class="badge bg-<%= case @order.status
+                            when 'pending' then 'warning'
+                            when 'paid' then 'info'  
+                            when 'shipped' then 'primary'
+                            when 'delivered' then 'success'
+                            when 'cancelled' then 'danger'
+                            else 'secondary'
+                            end %> fs-6 px-3 py-2">
+      <%= @order.status.humanize %>
+    </span>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <!-- Order Items -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Order Items</h5>
+      </div>
+      <div class="card-body">
+        <% @order_items.each_with_index do |item, index| %>
+          <div class="<%= 'border-bottom pb-3 mb-3' unless index == @order_items.length - 1 %>">
+            <div class="row align-items-center">
+              <div class="col-md-2">
+                <% if item.product.images.attached? %>
+                  <%= image_tag item.product.images.first, 
+                      class: "img-fluid rounded", 
+                      style: "max-height: 80px; object-fit: cover;" %>
+                <% else %>
+                  <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                       style="height: 80px;">
+                    <small class="text-muted">No Image</small>
+                  </div>
+                <% end %>
+              </div>
+              <div class="col-md-5">
+                <h6>
+                  <%= link_to item.product.name, product_path(item.product), 
+                      class: "text-decoration-none" %>
+                </h6>
+                <p class="text-muted mb-1"><%= item.product.category %></p>
+                <small class="text-muted">
+                  <%= truncate(item.product.description, length: 100) %>
+                </small>
+              </div>
+              <div class="col-md-2 text-center">
+                <strong>Qty: <%= item.quantity %></strong>
+              </div>
+              <div class="col-md-2 text-end">
+                <div class="small text-muted">
+                  <%= number_to_currency(item.price) %> each
+                </div>
+                <strong><%= number_to_currency(item.total_price) %></strong>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Shipping Address -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Shipping Address</h5>
+      </div>
+      <div class="card-body">
+        <%= simple_format(@order.billing_address) %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h5>Order Summary</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-2">
+          <span>Items (<%= @order.total_items %>):</span>
+          <span><%= number_to_currency(@order.subtotal) %></span>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-2">
+          <span>Shipping:</span>
+          <span>FREE</span>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-2">
+          <span>Tax:</span>
+          <div class="text-end">
+            <div><%= number_to_currency(@order.tax_amount) %></div>
+            <% if @order.province %>
+              <% @order.tax_breakdown.each do |tax_type, amount| %>
+                <small class="text-muted d-block">
+                  <%= tax_type.upcase %>: <%= number_to_currency(amount) %>
+                </small>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        
+        <hr>
+        
+        <div class="d-flex justify-content-between mb-3">
+          <strong>Total:</strong>
+          <strong class="fs-5 text-primary"><%= number_to_currency(@order.total) %></strong>
+        </div>
+        
+        <div class="d-grid gap-2">
+          <%= link_to "← Back to Orders", orders_path, class: "btn btn-outline-secondary" %>
+          <%= link_to "Buy Again", root_path, class: "btn btn-primary" %>
+          <% if @order.can_be_cancelled? %>
+            <%= link_to "Cancel Order", order_path(@order), method: :delete,
+                confirm: "Are you sure you want to cancel this order?",
+                class: "btn btn-outline-danger" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Order Status Timeline -->
+    <div class="card mt-3">
+      <div class="card-header">
+        <h6>Order Status</h6>
+      </div>
+      <div class="card-body">
+        <div class="timeline">
+          <div class="timeline-item <%= 'active' if %w[pending paid shipped delivered].include?(@order.status) %>">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Order Placed</span>
+            <small class="text-muted d-block">
+              <%= @order.order_date.strftime("%b %d, %Y") %>
+            </small>
+          </div>
+          <div class="timeline-item <%= 'active' if %w[paid shipped delivered].include?(@order.status) %>">
+            <i class="fas fa-credit-card"></i>
+            <span>Payment <%= @order.status == 'paid' ? 'Confirmed' : 'Pending' %></span>
+          </div>
+          <div class="timeline-item <%= 'active' if %w[shipped delivered].include?(@order.status) %>">
+            <i class="fas fa-truck"></i>
+            <span>Shipped</span>
+          </div>
+          <div class="timeline-item <%= 'active' if @order.status == 'delivered' %>">
+            <i class="fas fa-check-circle"></i>
+            <span>Delivered</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.timeline {
+  padding-left: 0;
+}
+
+.timeline-item {
+  display: flex;
+  align-items-center;
+  padding: 10px 0;
+  color: #6c757d;
+}
+
+.timeline-item.active {
+  color: #007bff;
+  font-weight: 500;
+}
+
+.timeline-item i {
+  width: 20px;
+  margin-right: 10px;
+}
+</style>
