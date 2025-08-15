@@ -77,29 +77,6 @@
           </span>
         <% end %>
       </div>
-    </div>
-  </div>
-</nav></ul>
-        </li>
-        <li class="nav-item">
-          <%= link_to "About", about_path, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "Contact", contact_path, class: "nav-link" %>
-        </li>
-      </ul>
-      
-      <div class="d-flex align-items-center">
-        <!-- Search Form (Feature 2.6 ✯) -->
-        <%= render 'shared/search_form' %>
-        
-        <!-- Shopping Cart -->
-        <%= link_to cart_path, class: "btn btn-outline-light ms-3 cart-icon" do %>
-          <i class="fas fa-shopping-cart"></i>
-          <span class="cart-count" id="cart-count">
-            <%= session[:cart]&.values&.sum || 0 %>
-          </span>
-        <% end %>
       </div>
     </div>
   </div>
