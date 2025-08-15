@@ -1,4 +1,4 @@
-<div class="d-flex justify-content -between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
     <h1>
         <% if @current_category.present? %>
             <%= @current_category %> Products
@@ -34,7 +34,7 @@
     </div>
 <% end %>
 <% if @products.any? %>
-    <div class="row">
+    <div class="row g-3">
         <% @products.each do |product| %>
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <%= render 'product_card', product: product %>

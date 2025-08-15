@@ -1,18 +1,10 @@
 <% if flash.any? %>
   <div class="container mt-3">
     <% flash.each do |type, message| %>
-        <%
-            alert_class = case type.to_s
-                      when "notice" then "alert-success"
-                      when "alert" then "alert-danger"
-                      when "error" then "alert-danger"
-                      else "alert-info"
-                      end 
-        %>
-        <div class="alert <%= alert_class %> alert-dismissible fade show" role="alert">
-            <%= message %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" ></button>
-        </div>
+      <div class="alert alert-<%= type == 'notice' ? 'success' : 'danger' %> alert-dismissible fade show">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
     <% end %>
   </div>
 <% end %>

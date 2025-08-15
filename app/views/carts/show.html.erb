@@ -87,7 +87,7 @@
           
           <div class="d-grid gap-2">
             <% if user_signed_in? %>
-              <%= link_to "Proceed to Checkout", show_checkout_index_path, 
+              <%= link_to "Proceed to Checkout", checkout_show_path, 
                   class: "btn btn-primary btn-lg" %>
             <% else %>
               <%= link_to "Sign In to Checkout", new_user_session_path, 

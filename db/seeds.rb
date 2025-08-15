@@ -47,6 +47,30 @@ end
 
 puts "Canadian provinces and tax rates created!"
 
+# Add 24 more products for pagination test
+
+require 'open-uri'
+adjectives = %w[Cool Smart Fast Bright Fresh Modern Classic Trendy Sleek Compact]
+nouns = %w[Speaker Watch Lamp Chair Table Phone Book Toy Mixer Headset]
+
+24.times do |i|
+    name = "#{adjectives.sample} #{nouns.sample} #{rand(100..999)}"
+    product = Product.create!(
+        name: name,
+        description: "#{name} is a great product for your needs. Randomly generated for testing.",
+        price: rand(10..100),
+        category: ["Books", "Electronics", "Clothing", "Home", "Toys"].sample,
+        on_sale: [true, false].sample,
+        new_arrival: [true, false].sample
+    )
+    # Attach a resized placeholder image as thumbnail
+    unless product.images.attached?
+        file = URI.open("https://picsum.photos/seed/#{product.id}/80/80")
+        product.images.attach(io: file, filename: "thumb-#{product.id}.jpg")
+        puts "Attached thumbnail image for #{product.name}"
+    end
+end
+
 
 #Create sample products 
 products = [
@@ -93,9 +117,17 @@ products = [
 ]
 
 products.each do |product_attrs|
-    Product.find_or_create_by(name: product_attrs[:name]) do |product|
-        product.assign_attributes(product_attrs)
-    end
+            product = Product.find_or_create_by(name: product_attrs[:name])
+            product.assign_attributes(product_attrs)
+            product.save!
+
+            # Attach a generic placeholder image if no image is attached
+            if product.images.blank?
+                require 'open-uri'
+                file = URI.open("https://picsum.photos/seed/#{product.id}/600/400")
+                product.images.attach(io: file, filename: "placeholder-#{product.id}.jpg")
+                puts "Attached placeholder image for #{product.name}"
+            end
 end
 
 puts "Sample products created!"

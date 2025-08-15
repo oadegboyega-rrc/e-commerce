@@ -1,0 +1,11 @@
+HTML/CSS Validation Checklist:
+- All pages have <!DOCTYPE html> and valid <html>, <head>, <body> tags
+- All <img> tags have alt attributes
+- No duplicate IDs
+- All <form> elements have method and action
+- No unclosed tags
+- Use semantic elements where possible (<header>, <main>, <footer>, <section>, <nav>)
+- No inline styles (use classes)
+- Responsive meta tag present
+- No deprecated tags or attributes
+- Run through https://validator.w3.org/ for final check

@@ -69,7 +69,7 @@ class CartsController < ApplicationController
 
     private
     
-    def initializer_cart
+    def initialize_cart
         @cart = session[:cart] || {}
     end 
 

@@ -1,0 +1,16 @@
+<div class="product-card">
+  <div class="product-image">
+    <% if product.images.attached? %>
+  <%= image_tag product.images.first.variant(resize_to_fill: [80, 80]), alt: product.name, class: "img-thumbnail product-thumb" %>
+    <% else %>
+      <div class="bg-light d-flex align-items-center justify-content-center" style="height:200px;width:300px;">
+        <span class="text-muted">No Image</span>
+      </div>
+    <% end %>
+  </div>
+  <div class="product-info">
+    <h3 class="product-title"><%= product.name %></h3>
+    <p class="product-price">$<%= product.price %></p>
+    <%= link_to "View Details", product_path(product), class: "btn btn-primary" %>
+  </div>
+</div>
