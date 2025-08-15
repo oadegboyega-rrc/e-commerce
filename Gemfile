@@ -91,7 +91,7 @@ group :development, :test do
 
 
   #Testing (for later)
-  gem 'rspec-rails', '~> 5.0'
+  gem 'rspec-rails', '~> 8.0'
   gem 'factory_bot_rails'
 end
 group :development do
