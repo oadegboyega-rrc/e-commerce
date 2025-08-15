@@ -1,2 +1,71 @@
-<h1>Pages#contact</h1>
-<p>Find me in app/views/pages/contact.html.erb</p>
+<div class="row">
+<div class="col-lg-8 mx-auto">
+    <h1>Contact Us</h1>
+
+    <p class="lead">We would love to hear from you! Whether you have questions, feedback, or need assistance, feel free to reach out.</p>
+
+    <h3>Get in Touch</h3>
+    <p>If you have any inquiries or need support, please contact us through the following methods:</p>
+
+    <ul>
+        <li><strong>Email:</strong><a href="mailto:support@myecommercestore.com">support@myecommercestore.com</a></li>
+        <li><strong>Phone:</strong> +1 (555) 123-4567</li>
+        <li><strong>Address:</strong> 123 E-Commerce St, Suite 456, Shopping City, SC 78901</li>
+        <li><strong>Business Hours:</strong> Monday to Friday, 9 AM - 5 PM (EST)</li>   
+        <li><strong>Follow us on Social Media:</strong>
+            <ul>
+                <li><%= link_to "Facebook", "https://facebook.com/myecommercestore", target: "_blank" %></li>
+                <li><%= link_to "Twitter", "https://twitter.com/myecommercestore", target: "_blank" %></li>
+                <li><%= link_to "Instagram", "https://instagram.com/myecommercestore", target: "_blank" %></li>
+            </ul>
+        </li>   
+
+    </ul>
+
+    <h3>Contact Form</h3>
+    <p>If you prefer to send us a message directly, please fill out the form below
+       
+    <form>
+        <div class="mb-3">
+            <label for="name" class="form-label">Your Name</label>
+            <input type="text" class="form-control" id="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Your Email</label>
+            <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" required>
+        </div>  
+        <div class="mb-3">
+            <label for="message" class="form-label">Your Message</label>
+            <textarea class="form-control" id="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+
+    <div class="text-center">
+        <h3>Frequently asked Questions</h3>
+        <div class="row text-start">
+            <div class="col-md-6">
+                <h5>What is your return policy?</h5>
+                <p>We offer a 30-day return policy on most items. Please refer to our <%= link_to "Return Policy", return_policy_path %> for more details.</p>
+            </div>
+            <div class="col-md-6">
+                <h5>How can I track my order?</h5>
+                <p>You can track your order using the tracking number provided in your order confirmation email.</p>
+            </div>
+
+            <div class="col-md-6">
+                <h5>Do you offer international shipping?</h5>
+                <p>Yes, we ship to many countries worldwide. Please check our <%= link_to "Shipping Information", shipping_info_path %> for more details.</p>   
+            </div>
+
+            <div class="col-md-6">
+                <h5>How do i cancel mu order?</h5>
+                <p>You can cancel your order within 24 hours of placing it.</p>
+            </div>
+        </div>
+    </div>
+</div>

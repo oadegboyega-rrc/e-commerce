@@ -1,2 +1,36 @@
-<h1>Pages#about</h1>
-<p>Find me in app/views/pages/about.html.erb</p>
+<div class="row">
+    <div class="col-g-8 mx-auto">
+        <h1>About Our Store</h1>
+
+        <p class="lead">Welcome to my E-Commerce Store, yout premier destination for quality products prices.</p>
+
+        <h3>Our Mission</h3>
+        <p>We are committed to providing our customers with an exceptional shopping experience, offering a carefully curated selection of products across multiple categories including electronics, clothing, home goods, and more.</p>
+
+        <h3>Why Choose Us?</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <ul>
+                    <li><strong>Quality Products:</strong> We source only the best products from trusted suppliers.</li>
+                    <li><strong>Competitive Prices:</strong> We strive to offer the best prices without compromising on quality.</li>
+                    <li><strong>Customer Satisfaction:</strong> Our customers are our top priority, and we are dedicated to ensuring their satisfaction with every purchase.</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul>
+                    <li><strong>Easy Returns:</strong> We offer hassle-free returns to ensure you are completely satisfied with your purchase.</li>
+                    <li><strong>Customer Support:</strong> Dedicated support team.</li>  
+                    <li><strong>Secure Shopping:</strong> We use the latest security measures to protect your personal and payment information.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Our Story</h3>
+        <p> founded in 2020, My E-commerce Store began as a small venture with a big vision: to create an online shopping destination that combines convenience, quality, and value. Today we serve customers across the globe, continually expanding our product range and improving our services.</p> 
+
+        <div class="text-center mt-5">
+            <%= link_to "Start Shopping", root_path, class: "btn btn-primary btn-lg" %>
+            <%= link_to "Contact Us", contact_path, class: "btn btn-outline-primary btn-lg" %>
+        </div>
+    </div>
+</div>

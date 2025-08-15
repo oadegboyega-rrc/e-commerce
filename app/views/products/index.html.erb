@@ -2,9 +2,9 @@
     <h1>
         <% if @current_category.present? %>
             <%= @current_category %> Products
-        <% elsif @search_keyboard.present? %>
+        <% elsif @search_keyword.present? %>
             Search Results
-            <%= if @search_category.present? %>
+            <% if @search_category.present? %>
                 in <%= @search_category %>
             <% end %>
         <% else %>
@@ -13,11 +13,11 @@
     </h1>
 
     <div class="d-flex gap-2">
-        <% link_to "All", products_path(category: @current_category),
+        <%= link_to "All", products_path(category: @current_category),
             class: "btn #{ 'btn-primary' if params[:filter].blank?} #{ 'btn-outline-primary' unless params[:filter].blank?}" %>
-        <% link_to "On Sale", products_path(filter: 'on_sale', category: @current_category),
+        <%= link_to "On Sale", products_path(filter: 'on_sale', category: @current_category),
             class: "btn #{ 'btn-primary' if params[:filter] == 'on_sale'} #{ 'btn-outline-primary' unless params[:filter] == 'on_sale'}" %>
-        <% link_to "New Arrivals", products_path(filter: 'new', category: @current_category),
+        <%= link_to "New Arrivals", products_path(filter: 'new', category: @current_category),
             class: "btn #{ 'btn-primary' if params[:filter] == 'new'} #{ 'btn-outline-primary' unless params[:filter] == 'new'}" %>
         <%= link_to "Recently Updated", products_path(filter: 'recent', category: @current_category),
             class: "btn #{'btn-primary' if params[:filter] == 'recent'} #{'btn-outline-primary' unless params[:filter] == 'recent'}" %>
@@ -42,7 +42,7 @@
         <% end %>
     </div>
 
-    <-- Pagination Controls -->
+    <!-- Pagination Controls -->
     <div class="d-flex justify-content-center mt-4">
         <%= paginate @products, theme: 'twitter-bootstrap-4' %>
     </div>

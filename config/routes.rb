@@ -1,8 +1,9 @@
+## removed duplicate routes block
 Rails.application.routes.draw do
+  get "privacy", to: "pages#privacy", as: :privacy_policy
+  get "terms", to: "pages#terms", as: :terms_of_service
   get "pages/about"
   get "pages/contact"
-  get "products/index"
-  get "products/show"
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -27,8 +28,9 @@ Rails.application.routes.draw do
       get :category
     end
   end
+
   # Shopping cart routes
-  resources :cart, only: [:index, :update, :destroy] do
+  resource :cart, only: [:show, :update, :destroy] do
     collection do
       post :add_item
       post :update_item

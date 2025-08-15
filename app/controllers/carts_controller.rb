@@ -1,5 +1,5 @@
-class Cartscontroller < ApplicationController
-    before_action :initializer_cart
+class CartsController < ApplicationController
+    before_action :initialize_cart
 
     def show
         @cart_items = []
@@ -26,13 +26,11 @@ class Cartscontroller < ApplicationController
 
         if product_exists?(product_id)
             @cart[product_id] = (@cart[product_id] || 0) + quantity
-            session[:cart] = cart
-
+            session[:cart] = @cart
             flash[:notice] = "Item added to cart successfully!"
         else
             flash[:alert] = "Product not found."
         end
-
         redirect_back(fallback_location: root_path)
     end
 
